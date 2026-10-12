@@ -1,306 +1,214 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SARIF WEB WIRE</title>
-
-    <style>
-        :root {
-            /* Customize your theme */
-            --bg-color: #070910;
-            --text-color: #ffffff;
-            --accent-color: #00f7ff;
-            --error-color: #ff4058;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--bg-color);
-            color: var(--text-color);
-            font-family: Arial, sans-serif;
-            overflow: hidden;
-        }
-
-        .container {
-            width: min(90%, 420px);
-            padding: 35px 25px;
-            text-align: center;
-            border: 1px solid rgba(0, 247, 255, 0.35);
-            border-radius: 20px;
-            background: rgba(17, 21, 35, 0.92);
-            box-shadow: 0 0 35px rgba(0, 247, 255, 0.12);
-        }
-
-        .logo {
-            font-size: 27px;
-            font-weight: bold;
-            letter-spacing: 2px;
-            margin-bottom: 12px;
-            animation: rgbText 4s linear infinite;
-        }
-
-        .subtitle {
-            color: #9ba5bd;
-            font-size: 13px;
-            margin-bottom: 35px;
-            letter-spacing: 2px;
-        }
-
-        .loader {
-            width: 75px;
-            height: 75px;
-            margin: 0 auto 25px;
-            border: 5px solid #242b3b;
-            border-top: 5px solid var(--accent-color);
-            border-right: 5px solid #a855f7;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            box-shadow: 0 0 20px rgba(0, 247, 255, 0.15);
-        }
-
-        .loading-title {
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-
-        .loading-description {
-            color: #9ba5bd;
-            font-size: 13px;
-            margin-bottom: 25px;
-        }
-
-        .progress-track {
-            height: 7px;
-            width: 100%;
-            background: #252b3a;
-            border-radius: 20px;
-            overflow: hidden;
-            margin-bottom: 12px;
-        }
-
-        .progress-bar {
-            width: 0%;
-            height: 100%;
-            border-radius: 20px;
-            background: linear-gradient(
-                90deg,
-                #00f7ff,
-                #a855f7,
-                #ff3cac
-            );
-            box-shadow: 0 0 15px #00f7ff;
-            transition: width 0.2s linear;
-        }
-
-        .timer {
-            color: #c3ccdf;
-            font-size: 13px;
-        }
-
-        .error-box {
-            display: none;
-        }
-
-        .error-icon {
-            width: 65px;
-            height: 65px;
-            border: 2px solid var(--error-color);
-            color: var(--error-color);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 38px;
-            margin: 0 auto 22px;
-            box-shadow: 0 0 25px rgba(255, 64, 88, 0.18);
-        }
-
-        .error-title {
-            color: var(--error-color);
-            font-size: 19px;
-            margin-bottom: 13px;
-        }
-
-        .error-message {
-            color: #d0d5e2;
-            font-size: 14px;
-            line-height: 1.7;
-        }
-
-        .retry-button {
-            margin-top: 25px;
-            padding: 12px 28px;
-            color: white;
-            font-size: 14px;
-            font-weight: bold;
-            border: 1px solid var(--accent-color);
-            border-radius: 8px;
-            background: transparent;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .retry-button:hover {
-            background: var(--accent-color);
-            color: #070910;
-            box-shadow: 0 0 20px rgba(0, 247, 255, 0.35);
-        }
-
-        .footer {
-            margin-top: 32px;
-            font-size: 11px;
-            color: #69748d;
-            letter-spacing: 1px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        @keyframes rgbText {
-            0%   { color: #00f7ff; }
-            33%  { color: #a855f7; }
-            66%  { color: #ff3cac; }
-            100% { color: #00f7ff; }
-        }
-
-        @media (max-width: 400px) {
-            .logo {
-                font-size: 23px;
-            }
-
-            .container {
-                padding: 30px 20px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SARIF WEB WIRE</title>
+  <style>
+    :root {
+      --bg: #070910;
+      --panel: #111523;
+      --text: #f5f7ff;
+      --muted: #9ba5bd;
+      --cyan: #00f7ff;
+      --purple: #a855f7;
+      --pink: #ff3cac;
+      --green: #39e58c;
+      --red: #ff5368;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh; background: var(--bg); color: var(--text);
+      font-family: Arial, Helvetica, sans-serif; padding: 22px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .shell {
+      width: min(100%, 520px); border: 1px solid rgba(0,247,255,.3);
+      border-radius: 20px; padding: 26px; background: var(--panel);
+      box-shadow: 0 0 34px rgba(0,247,255,.09);
+    }
+    .brand {
+      font-size: clamp(22px, 5vw, 29px); font-weight: 800;
+      letter-spacing: 2px; text-align: center; margin-bottom: 8px;
+      animation: rgb 3s linear infinite;
+    }
+    .subtitle { text-align: center; color: var(--muted); font-size: 11px; letter-spacing: 2px; margin-bottom: 28px; }
+    .loader {
+      width: 72px; height: 72px; margin: 8px auto 24px; border-radius: 50%;
+      border: 5px solid #272d3d; border-top-color: var(--cyan);
+      border-right-color: var(--purple); animation: spin .85s linear infinite;
+    }
+    .center { text-align: center; }
+    .loading-title { font-size: 18px; margin-bottom: 10px; }
+    .muted { color: var(--muted); font-size: 13px; line-height: 1.6; }
+    .track { height: 7px; border-radius: 20px; background: #272d3d; overflow: hidden; margin: 24px 0 12px; }
+    .bar { width: 0; height: 100%; background: linear-gradient(90deg,var(--cyan),var(--purple),var(--pink)); transition: width .15s linear; }
+    .error-icon {
+      width: 62px; height: 62px; display: grid; place-items: center; border-radius: 50%;
+      border: 2px solid var(--red); color: var(--red); font-size: 36px; margin: 0 auto 20px;
+    }
+    .error-title { color: var(--red); font-size: 19px; margin-bottom: 12px; }
+    button { font: inherit; cursor: pointer; }
+    .primary {
+      border: 1px solid var(--cyan); color: var(--text); background: transparent;
+      border-radius: 9px; padding: 11px 22px; margin-top: 22px; font-weight: 700;
+    }
+    .primary:hover { background: var(--cyan); color: #070910; }
+    .hidden { display: none !important; }
+    .topline { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 18px; }
+    .badge { font-size: 10px; color: var(--cyan); border: 1px solid rgba(0,247,255,.35); border-radius: 20px; padding: 6px 9px; letter-spacing: 1px; white-space: nowrap; }
+    .notice { background: rgba(0,247,255,.06); border: 1px solid rgba(0,247,255,.18); color: #c9d5e8; border-radius: 10px; padding: 11px 12px; font-size: 12px; line-height: 1.5; margin-bottom: 18px; }
+    .section-label { font-size: 11px; color: var(--muted); letter-spacing: 1.7px; margin: 20px 0 10px; }
+    .function-list { display: grid; gap: 9px; }
+    .function-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 14px;
+      border: 1px solid #293044; background: #0b0f1a; border-radius: 11px; padding: 13px 14px;
+    }
+    .function-name { font-size: 14px; font-weight: 700; }
+    .function-desc { font-size: 11px; color: var(--muted); margin-top: 5px; }
+    .switch { flex: 0 0 auto; width: 47px; height: 27px; border: 0; border-radius: 20px; background: #343b4d; padding: 3px; transition: .2s; }
+    .switch::before { content: ""; display: block; width: 21px; height: 21px; border-radius: 50%; background: white; transition: .2s; }
+    .switch[aria-checked="true"] { background: linear-gradient(100deg,var(--cyan),var(--purple)); }
+    .switch[aria-checked="true"]::before { transform: translateX(20px); }
+    .status { color: var(--muted); font-size: 11px; min-width: 34px; text-align: right; }
+    .row-right { display: flex; align-items: center; gap: 9px; }
+    .footer { text-align: center; color: #69748d; font-size: 10px; letter-spacing: 1px; margin-top: 24px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes rgb { 0% {color:var(--cyan)} 33% {color:var(--purple)} 66% {color:var(--pink)} 100% {color:var(--cyan)} }
+    @media (max-width: 420px) { body { padding: 12px; } .shell { padding: 20px 15px; } .function-row { padding: 12px 10px; } }
+  </style>
 </head>
-
 <body>
+  <main class="shell">
+    <!-- PAGE 1: Loading screen -->
+    <section id="loadingPage">
+      <h1 class="brand">SARIF WEB WIRE</h1>
+      <p class="subtitle">SECURE WEB CONNECTION</p>
+      <div class="loader" aria-hidden="true"></div>
+      <div class="center">
+        <h2 class="loading-title">Please Wait...</h2>
+        <p class="muted">Establishing your connection</p>
+      </div>
+      <div class="track"><div class="bar" id="progressBar"></div></div>
+      <p class="muted center">Loading: <span id="timeLeft">120</span> seconds</p>
+    </section>
 
-    <main class="container">
+    <!-- PAGE 2: Demo menu -->
+    <section id="menuPage" class="hidden">
+      <div class="topline">
+        <div>
+          <h1 class="brand" style="text-align:left;margin-bottom:5px">SARIF WEB WIRE</h1>
+          <p class="muted">CONTROL MENU</p>
+        </div>
+        <span class="badge">ONLINE</span>
+      </div>
+      <div class="notice">
+        Switches can be turned ON or OFF from this menu.
+      </div>
+      <div class="topline">
+        <h2 style="font-size:17px">Function List</h2>
+        <button class="primary" id="allOffBtn" style="margin:0;padding:8px 12px;font-size:12px">TURN ALL OFF</button>
+      </div>
+      <p class="section-label">GENERAL</p>
+      <div class="function-list" id="functionList"></div>
+      <div class="footer">© 2026 SARIF WEB WIRE · WEB INTERFACE</div>
+    </section>
+  </main>
 
-        <section id="loadingScreen">
-            <h1 class="logo">SARIF WEB WIRE</h1>
-            <p class="subtitle">SECURE WEB CONNECTION</p>
+  <script>
+    // Adjust loading time here (seconds). 120 = 2 minutes.
+    const LOADING_TIME = 120;
 
-            <div class="loader"></div>
+    const demoFunctions = [
+      ["Speed Boost", "Tap to toggle ON/OFF"],
+      ["Jump Height", "Tap to toggle ON/OFF"],
+      ["No Clip", "Tap to toggle ON/OFF"],
+      ["Fly Mode", "Tap to toggle ON/OFF"],
+      ["ESP Line", "Tap to toggle ON/OFF"],
+      ["ESP Box", "Tap to toggle ON/OFF"],
+      ["Show Health", "Tap to toggle ON/OFF"],
+      ["Show Distance", "Tap to toggle ON/OFF"],
+      ["Enemy Counter", "Tap to toggle ON/OFF"],
+      ["Auto Run", "Tap to toggle ON/OFF"],
+      ["Fast Switch", "Tap to toggle ON/OFF"],
+      ["Night Mode", "Tap to toggle ON/OFF"],
+      ["RGB Effects", "Tap to toggle ON/OFF"],
+      ["Extra Feature 1", "Tap to toggle ON/OFF"],
+      ["Extra Feature 2", "Tap to toggle ON/OFF"]
+    ];
 
-            <h2 class="loading-title">Please Wait...</h2>
-            <p class="loading-description">
-                Establishing your connection
-            </p>
+    const loadingPage = document.getElementById("loadingPage");
+    const menuPage = document.getElementById("menuPage");
+    const progressBar = document.getElementById("progressBar");
+    const timeLeft = document.getElementById("timeLeft");
+    const functionList = document.getElementById("functionList");
+    const startTime = performance.now();
 
-            <div class="progress-track">
-                <div class="progress-bar" id="progressBar"></div>
-            </div>
+    function updateLoading(now) {
+      const elapsed = (now - startTime) / 1000;
+      const remaining = Math.max(0, LOADING_TIME - elapsed);
+      progressBar.style.width = Math.min(100, (elapsed / LOADING_TIME) * 100) + "%";
+      timeLeft.textContent = Math.ceil(remaining);
 
-            <p class="timer">
-                Loading: <span id="timeLeft">120</span> seconds
-            </p>
-        </section>
+      if (elapsed >= LOADING_TIME) {
+        loadingPage.classList.add("hidden");
+        menuPage.classList.remove("hidden");
+        return;
+      }
+      requestAnimationFrame(updateLoading);
+    }
 
-        <section class="error-box" id="errorScreen">
-            <h1 class="logo">SARIF WEB WIRE</h1>
-            <p class="subtitle">CONNECTION STATUS</p>
+    demoFunctions.forEach(([name, description], index) => {
+      const row = document.createElement("div");
+      row.className = "function-row";
 
-            <div class="error-icon">!</div>
+      const info = document.createElement("div");
+      const title = document.createElement("div");
+      title.className = "function-name";
+      title.textContent = name;
 
-            <h2 class="error-title">Connection Failed</h2>
+      const desc = document.createElement("div");
+      desc.className = "function-desc";
+      desc.textContent = description;
+      info.append(title, desc);
 
-            <p class="error-message">
-                Check your network<br>
-                please try again
-            </p>
+      const right = document.createElement("div");
+      right.className = "row-right";
 
-            <button class="retry-button" onclick="startLoading()">
-                TRY AGAIN
-            </button>
-        </section>
+      const status = document.createElement("span");
+      status.className = "status";
+      status.textContent = "OFF";
 
-        <footer class="footer">
-            © 2026 SARIF WEB WIRE
-        </footer>
+      const toggle = document.createElement("button");
+      toggle.className = "switch";
+      toggle.type = "button";
+      toggle.setAttribute("role", "switch");
+      toggle.setAttribute("aria-checked", "false");
+      toggle.setAttribute("aria-label", "Toggle " + name);
 
-    </main>
+      toggle.addEventListener("click", () => {
+        const isOn = toggle.getAttribute("aria-checked") !== "true";
+        toggle.setAttribute("aria-checked", String(isOn));
+        status.textContent = isOn ? "ON" : "OFF";
+        status.style.color = isOn ? "#39e58c" : "";
+      });
 
-    <script>
-        /*
-         * CUSTOM SETTINGS
-         *
-         * Change 120 to your desired loading duration in seconds.
-         *
-         * Examples:
-         * 30  = 30 seconds
-         * 60  = 1 minute
-         * 120 = 2 minutes
-         * 180 = 3 minutes
-         * 300 = 5 minutes
-         */
+      right.append(status, toggle);
+      row.append(info, right);
+      functionList.appendChild(row);
+    });
 
-        const LOADING_TIME = 120;
+    document.getElementById("allOffBtn").addEventListener("click", () => {
+      functionList.querySelectorAll(".switch").forEach(toggle => {
+        toggle.setAttribute("aria-checked", "false");
+      });
+      functionList.querySelectorAll(".status").forEach(status => {
+        status.textContent = "OFF";
+        status.style.color = "";
+      });
+    });
 
-        let startTime;
-        let animationFrame;
-        let loading = false;
-
-        const loadingScreen = document.getElementById("loadingScreen");
-        const errorScreen = document.getElementById("errorScreen");
-        const progressBar = document.getElementById("progressBar");
-        const timeLeft = document.getElementById("timeLeft");
-
-        function startLoading() {
-            cancelAnimationFrame(animationFrame);
-
-            loadingScreen.style.display = "block";
-            errorScreen.style.display = "none";
-
-            progressBar.style.width = "0%";
-            timeLeft.textContent = LOADING_TIME;
-
-            startTime = performance.now();
-            loading = true;
-
-            updateLoading();
-        }
-
-        function updateLoading() {
-            if (!loading) return;
-
-            const elapsed = (performance.now() - startTime) / 1000;
-            const remaining = Math.max(0, LOADING_TIME - elapsed);
-            const progress = Math.min(
-                100,
-                (elapsed / LOADING_TIME) * 100
-            );
-
-            progressBar.style.width = progress + "%";
-            timeLeft.textContent = Math.ceil(remaining);
-
-            if (elapsed >= LOADING_TIME) {
-                loading = false;
-
-                loadingScreen.style.display = "none";
-                errorScreen.style.display = "block";
-
-                return;
-            }
-
-            animationFrame = requestAnimationFrame(updateLoading);
-        }
-
-        startLoading();
-    </script>
-
+    requestAnimationFrame(updateLoading);
+  </script>
 </body>
 </html>
