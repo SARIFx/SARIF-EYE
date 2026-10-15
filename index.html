@@ -142,21 +142,59 @@
     const progressBar = document.getElementById("progressBar");
     const timeLeft = document.getElementById("timeLeft");
     const functionList = document.getElementById("functionList");
-    const startTime = performance.now();
+    let startTime = performance.now();
+    let countdownFrame = 0;
+    let bypassAttempt = false;
+    let menuUnlocked = false;
+
+    function beginCountdown() {
+      startTime = performance.now();
+      progressBar.style.width = "0%";
+      timeLeft.textContent = LOADING_TIME;
+      loadingPage.classList.remove("hidden");
+      menuPage.classList.add("hidden");
+      cancelAnimationFrame(countdownFrame);
+      countdownFrame = requestAnimationFrame(updateLoading);
+    }
 
     function updateLoading(now) {
+      // Stop progressing while the page is hidden; visibility handling restarts it.
+      if (document.hidden || menuUnlocked) return;
+
       const elapsed = (now - startTime) / 1000;
       const remaining = Math.max(0, LOADING_TIME - elapsed);
       progressBar.style.width = Math.min(100, (elapsed / LOADING_TIME) * 100) + "%";
       timeLeft.textContent = Math.ceil(remaining);
 
       if (elapsed >= LOADING_TIME) {
+        menuUnlocked = true;
         loadingPage.classList.add("hidden");
         menuPage.classList.remove("hidden");
         return;
       }
-      requestAnimationFrame(updateLoading);
+      countdownFrame = requestAnimationFrame(updateLoading);
     }
+
+    // If the visitor minimizes the window or switches tabs before the timer ends,
+    // restart the countdown when they return and show a warning.
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden && !menuUnlocked) {
+        bypassAttempt = true;
+        cancelAnimationFrame(countdownFrame);
+      } else if (!document.hidden && bypassAttempt && !menuUnlocked) {
+        bypassAttempt = false;
+        alert("120 SECOND WAIT KARO TIME BYPASS MAT KARO");
+        beginCountdown();
+      }
+    });
+
+    // Also restart if the page is restored from the browser's back/forward cache.
+    window.addEventListener("pageshow", (event) => {
+      if (event.persisted && !menuUnlocked) {
+        alert("120 SECOND WAIT KARO TIME BYPASS MAT KARO");
+        beginCountdown();
+      }
+    });
 
     demoFunctions.forEach(([name, description], index) => {
       const row = document.createElement("div");
@@ -208,7 +246,7 @@
       });
     });
 
-    requestAnimationFrame(updateLoading);
+    beginCountdown();
   </script>
 </body>
 </html>
